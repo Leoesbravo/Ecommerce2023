@@ -1,0 +1,178 @@
+﻿@model ML.Producto
+@{
+    ViewData["Title"] = "Lista de Productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class=row>
+        <div class="text-center">
+            <h2>Lista de Productos</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Seleccione una materia para ver su información o el botón de "+" para agregar un nuevo registro</h5>
+        </div>
+    </div>
+    <hr />
+    <div id="modalContainer"></div>
+
+    <div class="row">
+        <div class="col-auto ms-auto">
+            <button id="btnAgregar" onclick="AbrirModal()" class="btn btn-success"><i class="fa-regular fa-square-plus"></i></button>
+        </div>
+    </div>
+    <br />
+    <div id="ViewBag" style="display: none">@TempData["value"]</div>
+    <div class="modal fade " id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            @using (Html.BeginForm("Form", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-content">
+                    <div class="modal-header alert-secondary">
+                        <h5 class="modal-title" id="exampleModalLabel">Formulario de Productos</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        @Html.HiddenFor(model => model.IdProducto)
+                        <div class="row">
+                            <div class="col-md-5">
+                                @Html.LabelFor(model => model.Nombre)
+                                <div class="input-group ">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-plus" style="color:black"></i></span>
+                                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtFechaNacimiento", @autocomplete="off"})
+                                    @Html.ValidationMessageFor(model => model.Nombre)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.PrecioUnitario)
+                                <div class="input-group ">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-dollar-sign"></i></span>
+                                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtFechaNacimiento", @autocomplete="off"})
+                                    @Html.ValidationMessageFor(model => model.PrecioUnitario)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.Stock)
+                                <div class="input-group ">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-cubes-stacked"></i></span>
+                                    @Html.TextBoxFor(model => model.Stock, new { @class = "form-control", @id = "txtFechaNacimiento", @autocomplete="off"})
+                                    @Html.ValidationMessageFor(model => model.Stock)
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-11">
+                                @Html.LabelFor(model => model.Descripcion)
+                                <div class="input-group ">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-book-open"></i></span>
+                                    @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @id = "txtFechaNacimiento", @autocomplete="off"})
+                                    @Html.ValidationMessageFor(model => model.Descripcion)
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class=" col-md-4">
+                                @Html.LabelFor(model => model.Proveedor)
+                                <div class="input-group ">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-tie"></i></span>
+                                    @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un proveedor", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Proveedor)
+                                </div>
+                            </div>
+                            <div class=" col-md-3">
+                                @Html.LabelFor(model => model.Departamento.Area)
+                                <div class="input-group ">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-square-caret-down"></i></span>
+                                    @Html.DropDownListFor(model => model.Departamento.Area, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Areas", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Departamento.Area)
+                                </div>
+                            </div>
+                            <div class=" col-md-4">
+                                @Html.LabelFor(model => model.Proveedor)
+                                <div class="input-group ">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-tie"></i></span>
+                                    @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un proveedor", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Proveedor)
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
+                        <button id="btnGuardar" type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk" style="color: #000000;"></i> Guardar</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+
+    @if (Model.Productos == null || Model.Productos.Count == 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #c24e00;"></i> No existen registros de productos
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <table class="table  table-dark table-hover table-striped table-bordered table-responsive" id="table_usuarios">
+            <thead>
+                <tr class="table-secondary">
+                    <td>Editar</td>
+                    <td style="display :none;">id</td>
+                    <td>Nombre</td>
+                    <td>Precio</td>
+                    <td>Stock</td>
+                    <td>Descripcion</td>
+                    <td>Proveedor</td>
+                    <td>Departarmento</td>
+                    <td>Eliminar</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ML.Producto producto in Model.Productos)
+                {
+                    <tr>
+                        <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Form", "MateriaController1", new { IdMateria = producto.IdProducto })"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+                        <td style="display :none;">@producto.IdProducto </td>
+                        <td>@producto.Nombre</td>
+                        <td>@producto.PrecioUnitario</td>
+                        <td>@producto.Stock</td>
+                        <td>@producto.Descripcion</td>
+                        <td>@producto.Proveedor.Nombre</td>
+                        <td>@producto.Departamento.Nombre</td>
+
+                        <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "MateriaController1", new { IdMateria= producto.IdProducto})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+
+</div>
+<script type="text/javascript">
+
+    function AbrirModal(){
+         $('#Modal').modal('show');
+    }
+     //window.onload = function () {
+     //    var viewbag = $('#ViewBag').text()
+     //   if ($('#ViewBag').text() != ""){
+     //       $('#modalContainer').load('/Producto/ModalAction');
+     //   }
+     //}
+
+</script>   
