@@ -1,0 +1,105 @@
+﻿@model ML.Proveedor
+@{
+    ViewData["Title"] = "Lista de Productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript" src="~/js/Validaciones.js"></script>
+<div class="container">
+    <div class=row>
+        <div class="text-center">
+            <h2>Lista de Proveedores</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Seleccione un proveedor para ver su información o el botón de "+" para agregar un nuevo registro</h5>
+        </div>
+    </div>
+    <hr />
+    <section id="formulario" style="display:none;">
+        <div class="text-center">
+            <h2>Formulario de Proveedores</h2>
+        </div>
+@using (Html.BeginForm("Index", "Proveedor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+            <div class="row">
+                <div class="offset-md-1 col-md-5">
+            @Html.LabelFor(model => model.Nombre)
+                    <div class="input-group ">
+                        <span class="input-group-text" id="basic-addon12"><i class="fa-solid fa-user"></i></span>
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @autocomplete="off", @onkeypress="SoloLetras(event, 'txtNombre', 'lblNombre')"})
+                    </div>
+            @Html.ValidationMessageFor(model => model.Nombre)
+            @Html.Label("", null,  new {@id="lblNombre"})
+                </div>
+                <div class="col-md-5">
+            @Html.LabelFor(model => model.Telefono)
+                    <div class="input-group ">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-square-phone"></i></span>
+                @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control", @id = "txtTelefono", @autocomplete="off", @onkeypress="SoloNumeros(event, 'txtTelefono', 'lblTelefono')"})
+                    </div>
+            @Html.ValidationMessageFor(model => model.Telefono)
+            @Html.Label("", null,  new {@id="lblTelefono"})
+                </div>
+            </div>
+            <div class="text-center">
+                <input type="button" class="btn btn-secondary" onclick="DesplegarFormulario()" value="Ocultar">
+                <button class="btn btn-success" type="submit"><i class="fa-solid fa-floppy-disk"></i> Agregar</button>
+            </div>
+            <hr />
+}
+    </section>
+
+
+    <div class="row">
+        <div class="col-auto ms-auto">
+            <input type="button" id="btnAdd" class="btn btn-primary" value="+" onclick="DesplegarFormulario()" />
+        </div>
+    </div>
+    <br />
+
+@if (Model.Proveedores == null || Model.Proveedores.Count == 0)
+{
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #c24e00;"></i> No existen registros de proveedores
+                </div>
+            </div>
+        </div>
+}
+else
+{
+        <table class="table  table-dark table-hover table-striped table-bordered table-responsive" id="table_usuarios">
+            <thead>
+                <tr class="table-secondary">
+                    <td>Editar</td>
+                    <td style="display :none;">id</td>
+                    <td>Proveedor</td>
+                    <td>Telefono</td>
+                    <td>Eliminar</td>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (ML.Proveedor proveedor in Model.Proveedores)
+            {
+                    <tr>
+                        <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning" href="@Url.Action("Form", "MateriaController1", new { IdProveedor = proveedor.IdProveedor} )"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                        <td style="display :none;">@proveedor.IdProveedor </td>
+                        <td>@proveedor.Nombre</td>
+                        <td>@proveedor.Telefono</td>
+                        <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "MateriaController1", new { IdProveedor= proveedor.IdProveedor})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="fa-solid fa-eraser"></i></a></td>
+                    </tr>
+            }
+
+            </tbody>
+        </table>
+}
+
+</div>
+
+<script type="text/javascript">
+    function DesplegarFormulario(){
+        $('#formulario').toggle('slow')
+    }
+</script>

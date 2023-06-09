@@ -22,9 +22,4 @@ public partial class Producto
     public virtual Departamento? IdDepartamentoNavigation { get; set; }
 
     public virtual Proveedor? IdProveedorNavigation { get; set; }
-
-
-
-    //public string? NombreProveedor { get; set; }
-
 }

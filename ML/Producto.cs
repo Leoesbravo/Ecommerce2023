@@ -12,6 +12,10 @@ namespace ML
         {
 
         }
+        public Producto(List<object> productos)
+        {
+            this.Productos = productos;
+        }
         public Producto(int IdProducto, string Nombre, decimal PrecioUnitario, int stock, string Descripcion)
         {
             this.IdProducto = IdProducto;

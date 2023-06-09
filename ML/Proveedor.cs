@@ -18,6 +18,10 @@ namespace ML
         {
 
         }
+        public Proveedor(List<object> proveedores)
+        {
+            Proveedores = proveedores;
+        }
         public int IdProveedor { get; set; }
         public string Telefono { get; set; }
         public string  Nombre { get; set; }

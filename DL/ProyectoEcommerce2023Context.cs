@@ -23,6 +23,8 @@ public partial class ProyectoEcommerce2023Context : DbContext
 
     public virtual DbSet<Proveedor> Proveedors { get; set; }
 
+    public virtual DbSet<Usuario> Usuarios { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=.; Database= ProyectoEcommerce2023; TrustServerCertificate=True; User ID=sa; Password=pass@word1;");
@@ -89,6 +91,30 @@ public partial class ProyectoEcommerce2023Context : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Telefono)
                 .HasMaxLength(12)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasKey(e => e.IdUsuario).HasName("PK__Usuario__5B65BF970574B109");
+
+            entity.ToTable("Usuario");
+
+            entity.Property(e => e.ApellidoMaterno)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ApellidoPaterno)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Email)
+                .HasMaxLength(254)
+                .IsUnicode(false);
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Password).HasMaxLength(20);
+            entity.Property(e => e.Username)
+                .HasMaxLength(50)
                 .IsUnicode(false);
         });
 

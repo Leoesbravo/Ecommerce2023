@@ -3,20 +3,19 @@
     ViewData["Title"] = "Lista de Productos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script type="text/javascript" src="~/js/Validaciones.js"></script>
 <div class="container">
     <div class=row>
         <div class="text-center">
             <h2>Lista de Productos</h2>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <h5>Seleccione una materia para ver su información o el botón de "+" para agregar un nuevo registro</h5>
         </div>
     </div>
     <hr />
-    <div id="modalContainer"></div>
 
     <div class="row">
         <div class="col-auto ms-auto">
@@ -24,10 +23,9 @@
         </div>
     </div>
     <br />
-    <div id="ViewBag" style="display: none">@TempData["value"]</div>
     <div class="modal fade " id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            @using (Html.BeginForm("Form", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("Index", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 <div class="modal-content">
                     <div class="modal-header alert-secondary">
@@ -41,18 +39,20 @@
                             <div class="col-md-5">
                                 @Html.LabelFor(model => model.Nombre)
                                 <div class="input-group ">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-plus" style="color:black"></i></span>
-                                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtFechaNacimiento", @autocomplete="off"})
-                                    @Html.ValidationMessageFor(model => model.Nombre)
+                                    <span class="input-group-text" id="basic-addon12"><i class="fa-solid fa-tags"></i></span>
+                                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @autocomplete="off", @onkeypress="SoloLetras(event, 'txtNombre', 'lblNombre')"})
                                 </div>
+                                @Html.ValidationMessageFor(model => model.Nombre)
+                                @Html.Label("", null,  new {@id="lblNombre"})
                             </div>
                             <div class="col-md-3">
                                 @Html.LabelFor(model => model.PrecioUnitario)
                                 <div class="input-group ">
                                     <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-dollar-sign"></i></span>
-                                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtFechaNacimiento", @autocomplete="off"})
+                                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtPrecio", @autocomplete="off", @onkeypress="SoloNumeros(event, 'txtPrecio', 'lblPrecio')"})
                                     @Html.ValidationMessageFor(model => model.PrecioUnitario)
                                 </div>
+                                @Html.Label("", null,  new {@id="lblPrecio"})
                             </div>
                             <div class="col-md-3">
                                 @Html.LabelFor(model => model.Stock)
@@ -79,7 +79,7 @@
                             <div class=" col-md-4">
                                 @Html.LabelFor(model => model.Proveedor)
                                 <div class="input-group ">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-tie"></i></span>
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-handshake"></i></span>
                                     @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un proveedor", new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.Proveedor)
                                 </div>
@@ -89,7 +89,7 @@
                                 <div class="input-group ">
                                     <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-square-caret-down"></i></span>
                                     @Html.DropDownListFor(model => model.Departamento.Area, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Areas", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.Departamento.Area)
+                                    @Html.ValidationMessageFor(model => model.Departamento.Area.IdArea)
                                 </div>
                             </div>
                             <div class=" col-md-4">
@@ -112,7 +112,20 @@
             }
         </div>
     </div>
-
+    <div class="modal fade" id="NewModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+            <div class="modal-content ">
+                <div class="modal-header @TempData["value"]">
+                    <div class="alert @TempData["value"]" role="alert">
+                        <h4 class="alert-heading">Aviso!</h4>
+                        <p>@TempData["Mensaje"]</p>
+                        <hr>
+                        <p class="mb-0"> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     @if (Model.Productos == null || Model.Productos.Count == 0)
@@ -145,7 +158,7 @@
                 @foreach (ML.Producto producto in Model.Productos)
                 {
                     <tr>
-                        <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Form", "MateriaController1", new { IdMateria = producto.IdProducto })"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+                        <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning" href="@Url.Action("Form", "MateriaController1", new { IdMateria = producto.IdProducto })"><i class="fa-solid fa-pen-to-square"></i></a></td>
                         <td style="display :none;">@producto.IdProducto </td>
                         <td>@producto.Nombre</td>
                         <td>@producto.PrecioUnitario</td>
@@ -154,7 +167,7 @@
                         <td>@producto.Proveedor.Nombre</td>
                         <td>@producto.Departamento.Nombre</td>
 
-                        <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "MateriaController1", new { IdMateria= producto.IdProducto})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+                        <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "MateriaController1", new { IdMateria= producto.IdProducto})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="fa-solid fa-eraser"></i></a></td>
                     </tr>
                 }
 
@@ -163,16 +176,15 @@
     }
 
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript">
+     $(document).ready(function () {
+        $('#NewModal1').modal('@TempData["modal"]');
+    });
+
 
     function AbrirModal(){
          $('#Modal').modal('show');
     }
-     //window.onload = function () {
-     //    var viewbag = $('#ViewBag').text()
-     //   if ($('#ViewBag').text() != ""){
-     //       $('#modalContainer').load('/Producto/ModalAction');
-     //   }
-     //}
 
 </script>   
