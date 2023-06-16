@@ -20,7 +20,7 @@
                     <p class="card-text" id="pIdSemestre">@producto.Descripcion</p>
                     <p class="card-text" style="display: none;" id="pIdMateria"> @producto.IdProducto</p>
                    <p class="text-center">
-                       <a href="@Url.Action("CartPost", "VentaMateria", new { IdMateria = producto.IdProducto, Nombre = producto.Nombre, PrecioUnitario = producto.PrecioUnitario})" class="btn btn-success ">Añadir <i class="fa-solid fa-cart-plus" style="color: #f7d65e;"></i> </a>
+                       <a href="@Url.Action("Add", "VentaProducto", new { idProducto = producto.IdProducto})" class="btn btn-success ">Añadir <i class="fa-solid fa-cart-plus" style="color: #f7d65e;"></i> </a>
                    </p> 
 
                    @* <button class="btn btn-success" onclick="CrearObjeto()" >Añadir <i class="bi bi-cart3" style="color: khaki"></i></button>      *@             

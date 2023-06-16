@@ -31,7 +31,7 @@ namespace BL
 
                             producto.Proveedor = new ML.Proveedor();
                             objProducto.IdProveedorNavigation = new DL.Proveedor();
-                            
+
                             producto.Proveedor.IdProveedor = objProducto.IdProveedor.Value;
                             producto.Proveedor.Nombre = objProducto.IdProveedorNavigation.Nombre;
 
@@ -83,6 +83,51 @@ namespace BL
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
                 result.Ex = ex;
+            }
+            return result;
+        }
+        public static ML.Result GetById(int idProducto)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.ProyectoEcommerce2023Context context = new DL.ProyectoEcommerce2023Context())
+                {
+                    var query = context.Productos.FromSqlRaw($"ProductoGetById {idProducto}").AsEnumerable().FirstOrDefault();
+
+                    result.Objects = new List<object>();
+
+                    if (query != null)
+                    {
+                        ML.Producto producto = new ML.Producto();
+
+                        producto.IdProducto = query.IdProducto;
+                        producto.Nombre = query.Nombre;
+                        producto.PrecioUnitario = query.PrecioUnitario;
+                        producto.Stock = query.Stock;
+                        producto.Descripcion = query.Descripcion;
+
+                        producto.Proveedor = new ML.Proveedor();
+                        producto.Proveedor.IdProveedor = query.IdProveedor.Value;
+
+                        producto.Departamento = new ML.Departamento();
+                        producto.Departamento.IdDepartamento = query.IdDepartamento.Value;
+
+                        result.Object = producto;
+
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se ha podido realizar la consulta";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
             }
             return result;
         }

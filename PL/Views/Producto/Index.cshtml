@@ -49,7 +49,7 @@
                                 @Html.LabelFor(model => model.PrecioUnitario)
                                 <div class="input-group ">
                                     <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-dollar-sign"></i></span>
-                                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtPrecio", @autocomplete="off", @onkeypress="SoloNumeros(event, 'txtPrecio', 'lblPrecio')"})
+                                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtPrecio", @autocomplete="off", @onkeypress="SoloNumeros(event, 'txtPrecio', 'lblPrecio', 'basic-addon1')"})
                                     @Html.ValidationMessageFor(model => model.PrecioUnitario)
                                 </div>
                                 @Html.Label("", null,  new {@id="lblPrecio"})
@@ -57,15 +57,39 @@
                             <div class="col-md-3">
                                 @Html.LabelFor(model => model.Stock)
                                 <div class="input-group ">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-cubes-stacked"></i></span>
-                                    @Html.TextBoxFor(model => model.Stock, new { @class = "form-control", @id = "txtFechaNacimiento", @autocomplete="off"})
+                                    <span class="input-group-text" id="addonStock"><i class="fa-solid fa-cubes-stacked"></i></span>
+                                    @Html.TextBoxFor(model => model.Stock, new { @class = "form-control", @id = "txtStock", @autocomplete="off", @onkeypress="SoloNumeros(event, 'txtStock', 'lblStock', 'addonStock')"})
                                     @Html.ValidationMessageFor(model => model.Stock)
                                 </div>
+                                @Html.Label("", null,  new {@id="lblStock"})
                             </div>
                         </div>
                         <br />
                         <div class="row">
-                            <div class="col-md-11">
+                            <div class="col-md-4">
+
+                                @Html.LabelFor(model=> model.Imagen)
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-image"></i></span>
+                                    <input id="fuImage" type='file' class="form-control" name="fuImage" onchange="validateFile(this), readURL(this);  " />
+                                </div>
+
+                                @if (Model.Imagen != null)
+                                {
+
+                                    <img class="text-center" id="Img" src="data:image/*;base64,@Model.Imagen" style="width:250px ; height:250px" />
+
+                                }
+                                else
+                                {
+                                    <img class="text-center" id="Img" src="~/Images/default-product.jpg" style="width:250px ; height:250px" />
+                                }
+
+
+                            </div>
+                            <div class="col-md-7">
+
                                 @Html.LabelFor(model => model.Descripcion)
                                 <div class="input-group ">
                                     <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-book-open"></i></span>
@@ -76,33 +100,32 @@
                         </div>
                         <br />
                         <div class="row">
-                            <div class=" col-md-4">
-                                @Html.LabelFor(model => model.Proveedor)
-                                <div class="input-group ">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-handshake"></i></span>
-                                    @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un proveedor", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.Proveedor)
+                             <div class=" col-md-4">
+                                    @Html.LabelFor(model => model.Proveedor)
+                                    <div class="input-group ">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-handshake"></i></span>
+                                        @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un proveedor", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Proveedor)
+                                    </div>
                                 </div>
-                            </div>
-                            <div class=" col-md-3">
-                                @Html.LabelFor(model => model.Departamento.Area)
-                                <div class="input-group ">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-square-caret-down"></i></span>
-                                    @Html.DropDownListFor(model => model.Departamento.Area, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Areas", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.Departamento.Area.IdArea)
+                                <div class=" col-md-3">
+                                    @Html.LabelFor(model => model.Departamento.Area)
+                                    <div class="input-group ">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-square-caret-down"></i></span>
+                                        @Html.DropDownListFor(model => model.Departamento.Area, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Areas", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Departamento.Area.IdArea)
+                                    </div>
                                 </div>
-                            </div>
-                            <div class=" col-md-4">
-                                @Html.LabelFor(model => model.Proveedor)
-                                <div class="input-group ">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-tie"></i></span>
-                                    @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un proveedor", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.Proveedor)
+                                <div class=" col-md-4">
+                                    @Html.LabelFor(model => model.Proveedor)
+                                    <div class="input-group ">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-tie"></i></span>
+                                        @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un proveedor", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Proveedor)
+                                    </div>
                                 </div>
-                            </div>
-
                         </div>
-
+                        @Html.HiddenFor(model => model.Imagen)
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>

@@ -7,6 +7,8 @@ builder.Services.AddControllers(
 options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 builder.Services.AddDistributedMemoryCache();
 
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,8 +22,16 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Usuario}/{action=Login}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "NewPassword",
+        pattern: "Usuario/NewPassword/{email}",
+        defaults: new { controller = "Usuario", action = "NewPassword" });
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Usuario}/{action=Login}/{id?}");
+});
 
 app.Run();

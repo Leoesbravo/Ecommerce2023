@@ -19,6 +19,7 @@ public partial class Producto
 
     public int? IdDepartamento { get; set; }
 
+    public string? Imagen { get; set; } 
     public virtual Departamento? IdDepartamentoNavigation { get; set; }
 
     public virtual Proveedor? IdProveedorNavigation { get; set; }
