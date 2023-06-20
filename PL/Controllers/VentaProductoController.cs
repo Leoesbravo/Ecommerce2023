@@ -47,6 +47,7 @@ namespace PL.Controllers
         //    // Redirecciona a la página de carrito de compras o a donde desees
         //    return RedirectToAction("Carrito");
         //}
+
         //con Cookies
         public ActionResult Add(int idProducto)
         {

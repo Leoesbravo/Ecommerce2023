@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 using System.Data;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Pdf;
 
 namespace BL
 {
@@ -131,5 +133,9 @@ namespace BL
             }
             return result;
         }
+        //public static File GenerarPDF()
+        //{
+
+        //}
     }
 }
